@@ -166,13 +166,32 @@ public class BaiduDataSource implements DataSource {
             //数据库中存在
             LOG.info("从数据库中查询到Question：" + question.getQuestion());
             //回答问题
-            if (questionAnsweringSystem != null) {
-                questionAnsweringSystem.answerQuestion(question);
-            }
+            answerQuestion(questionAnsweringSystem, question);
             return question;
         }
+
         //2、本地缓存里面没有再查询baidu
-        question = new Question();
+        question = generateQuestionFromBaidu(questionStr);
+
+        //3、将baidu查询结果加入本地缓存
+        if (question != null) {
+            saveEvidence(question);
+
+            //回答问题
+            answerQuestion(questionAnsweringSystem, question);
+        }
+
+        return question;
+    }
+
+    private void answerQuestion(QuestionAnsweringSystem questionAnsweringSystem, Question question) {
+        if (questionAnsweringSystem != null) {
+            questionAnsweringSystem.answerQuestion(question);
+        }
+    }
+
+    private Question generateQuestionFromBaidu(String questionStr) {
+        Question question = new Question();
         question.setQuestion(questionStr);
 
         String query = "";
@@ -184,7 +203,9 @@ public class BaiduDataSource implements DataSource {
         }
         String referer = "http://www.baidu.com/";
         for (int i = 0; i < PAGE; i++) {
-            query = "http://www.baidu.com/s?tn=monline_5_dg&ie=utf-8&wd=" + query+"&oq="+query+"&usm=3&f=8&bs="+query+"&rsv_bp=1&rsv_sug3=1&rsv_sug4=141&rsv_sug1=1&rsv_sug=1&pn=" + i * PAGESIZE;
+            query = "http://www.baidu.com/s?tn=monline_5_dg&ie=utf-8&wd=" + query +
+                    "&oq=" + query + "&usm=3&f=8&bs=" + query +
+                    "&rsv_bp=1&rsv_sug3=1&rsv_sug4=141&rsv_sug1=1&rsv_sug=1&pn=" + i * PAGESIZE;
             LOG.debug(query);
             List<Evidence> evidences = searchBaidu(query, referer);
             referer = query;
@@ -199,17 +220,14 @@ public class BaiduDataSource implements DataSource {
         if (question.getEvidences().isEmpty()) {
             return null;
         }
-        //3、将baidu查询结果加入本地缓存
+        return question;
+    }
+
+    private void saveEvidence(Question question) {
         if (question.getEvidences().size() > 7) {
             LOG.info("将Question：" + question.getQuestion() + " 加入MySQL数据库");
             MySQLUtils.saveQuestionToDatabase("baidu:", question);
         }
-
-        //回答问题
-        if (questionAnsweringSystem != null) {
-            questionAnsweringSystem.answerQuestion(question);
-        }
-        return question;
     }
 
     private List<Evidence> searchBaidu(String url, String referer) {

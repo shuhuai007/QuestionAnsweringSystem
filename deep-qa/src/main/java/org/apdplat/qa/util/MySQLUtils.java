@@ -1,21 +1,19 @@
 /**
- * 
  * APDPlat - Application Product Development Platform
  * Copyright (c) 2013, 杨尚川, yang-shangchuan@qq.com
- * 
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
  */
 
 package org.apdplat.qa.util;
@@ -35,7 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 
+ *
  * @author 杨尚川
  */
 public class MySQLUtils {
@@ -63,7 +61,7 @@ public class MySQLUtils {
     public static String getRewindEvidenceText(String question, String answer) {
         String sql = "SELECT text FROM rewind where question=?";
         Connection con = getConnection();
-        if(con == null){
+        if (con == null) {
             return null;
         }
         PreparedStatement pst = null;
@@ -89,8 +87,8 @@ public class MySQLUtils {
     public static void saveRewindEvidenceText(String question, String answer, String text) {
         String sql = "insert into rewind (question, text) values (?, ?)";
         Connection con = getConnection();
-        if(con == null){
-            return ;
+        if (con == null) {
+            return;
         }
         PreparedStatement pst = null;
         ResultSet rs = null;
@@ -116,7 +114,7 @@ public class MySQLUtils {
         List<Question> questions = new ArrayList<>();
         String questionSql = "select question from question";
         Connection con = getConnection();
-        if(con == null){
+        if (con == null) {
             return questions;
         }
         PreparedStatement pst = null;
@@ -128,10 +126,10 @@ public class MySQLUtils {
             while (rs.next()) {
                 String que = rs.getString(1);
                 int index = que.indexOf(":");
-                if(index > 0){
-                    que = que.substring(index+1);
+                if (index > 0) {
+                    que = que.substring(index + 1);
                 }
-                if(que == null || "".equals(que.trim())){
+                if (que == null || "".equals(que.trim())) {
                     continue;
                 }
                 Question question = new Question();
@@ -151,7 +149,7 @@ public class MySQLUtils {
         String questionSql = "select id,question from question";
         String evidenceSql = "select title,snippet from evidence where question=?";
         Connection con = getConnection();
-        if(con == null){
+        if (con == null) {
             return questions;
         }
         PreparedStatement pst = null;
@@ -196,7 +194,7 @@ public class MySQLUtils {
         String questionSql = "select id,question from question where question=?";
         String evidenceSql = "select title,snippet from evidence where question=?";
         Connection con = getConnection();
-        if(con == null){
+        if (con == null) {
             return null;
         }
         PreparedStatement pst = null;
@@ -239,13 +237,13 @@ public class MySQLUtils {
     }
 
     public static void saveQuestionToDatabase(String pre, Question question) {
-		//如果问题已经保存
+        //如果问题已经保存
 
         String questionSql = "insert into question (question) values (?)";
         String evidenceSql = "insert into evidence (title, snippet, question) values (?, ?, ?)";
         Connection con = getConnection();
-        if(con == null){
-            return ;
+        if (con == null) {
+            return;
         }
         PreparedStatement pst = null;
         ResultSet rs = null;
