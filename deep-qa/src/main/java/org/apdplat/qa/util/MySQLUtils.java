@@ -260,7 +260,7 @@ public class MySQLUtils {
                 rs = pst.getGeneratedKeys();
                 long primaryKey = 0;
                 if (rs.next()) {
-                    primaryKey = (Long) rs.getObject(1);
+                    primaryKey = Long.parseLong(rs.getObject(1).toString());
                 }
                 //关闭pst和rs
                 close(pst, rs);
