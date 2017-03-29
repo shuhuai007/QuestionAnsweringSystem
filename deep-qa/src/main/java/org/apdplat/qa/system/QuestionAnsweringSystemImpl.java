@@ -180,6 +180,7 @@ public class QuestionAnsweringSystemImpl implements QuestionAnsweringSystem {
     public List<Question> answerQuestions(List<Question> questions) {
         for (Question question : questions) {
             question = questionClassifier.classify(question);
+
             LOG.info("开始处理Question " + (questionIndex++) + "：" + question.getQuestion() + " 【问题类型：" + question.getQuestionType() + "】");
             if (question.getQuestionType() == QuestionType.NULL) {
                 unknownTypeQuestions.add(question);

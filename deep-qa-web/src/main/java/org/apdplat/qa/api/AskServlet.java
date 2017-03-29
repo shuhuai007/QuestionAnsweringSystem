@@ -72,7 +72,7 @@ public class AskServlet extends HttpServlet {
                 candidateAnswers = question.getAllCandidateAnswer();
             }
         }
-        LOG.info("问题："+questionStr); 
+        LOG.info("问题：" + questionStr);
         try (PrintWriter out = response.getWriter()) {
             String json = JsonGenerator.generate(candidateAnswers, topN);
             out.println(json);
