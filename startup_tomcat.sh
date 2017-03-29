@@ -26,4 +26,5 @@ echo mkdir logs directory
 chmod +x ~/tomcat-8.0.27/apache-tomcat-8.0.27/bin/*.sh
 ~/tomcat-8.0.27/apache-tomcat-8.0.27/bin/catalina.sh start
 echo deep-qa-web-1.2 has been started
+
 tail -f ~/tomcat-8.0.27/apache-tomcat-8.0.27/logs/*

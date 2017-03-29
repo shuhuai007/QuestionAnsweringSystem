@@ -41,6 +41,7 @@ import org.apdplat.qa.system.QuestionAnsweringSystem;
 import org.apdplat.qa.util.MySQLUtils;
 import org.apdplat.qa.util.Tools;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -260,12 +261,7 @@ public class GoogleDataSource implements DataSource {
                     //从URL中提取正文
                     String url = result.get("url").toString();
                     String content = Tools.getHTMLContent(url);
-                    if (content == null) {
-                        content = result.get("content").toString();
-                        content = content.replaceAll("<b>", "");
-                        content = content.replaceAll("</b>", "");
-                        content = content.replaceAll("\\.\\.\\.", "");
-                    }
+                    content = retrieveContent(result, content);
                     evidence.setSnippet(content);
                     LOG.debug(content);
                 }
@@ -275,6 +271,16 @@ public class GoogleDataSource implements DataSource {
             LOG.error("执行搜索失败：", e);
         }
         return evidences;
+    }
+
+    private String retrieveContent(JSONObject result, String content) throws JSONException {
+        if (content == null) {
+            content = result.get("content").toString();
+            content = content.replaceAll("<b>", "");
+            content = content.replaceAll("</b>", "");
+            content = content.replaceAll("\\.\\.\\.", "");
+        }
+        return content;
     }
 
     public static void main(String args[]) {
