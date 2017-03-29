@@ -64,7 +64,7 @@ public class CommonQuestionAnsweringSystem extends QuestionAnsweringSystemImpl {
         LOG.info("开始构造问答系统");
         //1、默认评分组件权重
         ScoreWeight scoreWeight = new ScoreWeight();
-        //2、问答系统默认文件数据源		
+        //2、问答系统默认文件数据源
         List<String> files = new ArrayList<>();
         files.add(FilesConfig.personNameMaterial);
         files.add(FilesConfig.locationNameMaterial);
