@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apdplat.qa.SharedQuestionAnsweringSystem;
 import org.apdplat.qa.model.CandidateAnswer;
 import org.apdplat.qa.model.Question;
+import org.apdplat.qa.util.ChineseCharUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,6 +60,10 @@ public class AskServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         
         String questionStr = request.getParameter("q");
+        if (ChineseCharUtils.isChinese(questionStr)) {
+            questionStr = ChineseCharUtils.trimAllBlankChar(questionStr);
+        }
+
         String n = request.getParameter("n");
         int topN = -1;
         if(n != null && StringUtils.isNumeric(n)){

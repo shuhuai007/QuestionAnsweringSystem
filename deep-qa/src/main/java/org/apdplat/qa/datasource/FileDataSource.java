@@ -33,6 +33,7 @@ import org.apdplat.qa.model.Evidence;
 import org.apdplat.qa.model.Question;
 import org.apdplat.qa.system.CommonQuestionAnsweringSystem;
 import org.apdplat.qa.system.QuestionAnsweringSystem;
+import org.apdplat.qa.util.MySQLUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,6 +68,16 @@ public class FileDataSource implements DataSource {
 
     @Override
     public Question getAndAnswerQuestion(String questionStr, QuestionAnsweringSystem questionAnsweringSystem) {
+        //1、先从本地缓存里面找
+        Question questionCache = MySQLUtils.getQuestionFromDatabase("baidu:", questionStr);
+        if (questionCache != null) {
+            //数据库中存在
+            LOG.info("从数据库中查询到Question：" + questionCache.getQuestion());
+            //回答问题
+            answerQuestion(questionAnsweringSystem, questionCache);
+            return questionCache;
+        }
+
         for (Question question : getQuestions()) {
             String q = question.getQuestion().trim().replace("?", "").replace("？", "");
             questionStr = questionStr.trim().replace("?", "").replace("？", "");
@@ -79,6 +90,12 @@ public class FileDataSource implements DataSource {
             }
         }
         return null;
+    }
+
+    private void answerQuestion(QuestionAnsweringSystem questionAnsweringSystem, Question question) {
+        if (questionAnsweringSystem != null) {
+            questionAnsweringSystem.answerQuestion(question);
+        }
     }
 
     @Override
