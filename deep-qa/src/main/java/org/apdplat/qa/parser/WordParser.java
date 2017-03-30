@@ -77,12 +77,16 @@ public class WordParser {
     public static void main(String[] args) {
         List<Word> parse = parse("在河边一排排梨树下面有许多的非洲象和熊猫，还有很多的桉树，红色的金鱼在水里游来游去，猎豹在绿色的草地上跑来跑去!");
         System.out.println(parse);
+
         parse = parse("布什是个什么样的人");
         System.out.println(parse);
+
         parse = parse("张三和");
         System.out.println(parse);
+
         parse = parse("哈雷彗星的发现者是六小龄童和伦琴,专访微软亚洲研究院院长洪小文");
         System.out.println(parse);
+
         String str = " 《创业邦》杂志记者对微软亚洲研究院院长洪小文进行了专访。 《创业邦》：微软亚洲  研究院 ... 从研发的角度来说，研究院是一个战略性的部门。因为一家公司最后成功与   ...";
         parse = parse(str);
         System.out.println(parse);
