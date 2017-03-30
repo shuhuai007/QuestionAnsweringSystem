@@ -7,6 +7,7 @@
         </layout>
     </appender>
     <appender name="logfile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <param name="Encoding" value="UTF-8" />
         <File>logs/logback.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">  
             <FileNamePattern>logs/logback_%i.log</FileNamePattern>
