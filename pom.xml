@@ -48,4 +48,15 @@
         <module>deep-qa</module>
         <module>deep-qa-web</module>
     </modules>
+
+    <!--<dependencies>-->
+        <!--<dependency>-->
+            <!--<groupId>com.thoughtworks</groupId>-->
+            <!--<artifactId>xsimilarity</artifactId>-->
+            <!--<version>0.1</version>-->
+            <!--<scope>system</scope>-->
+            <!--<systemPath>${project.basedir}/lib/xsimilarity-0.1.jar</systemPath>-->
+        <!--</dependency>-->
+    <!--</dependencies>-->
+
 </project>
