@@ -78,6 +78,10 @@ TimeOtherSOB->Other3 .*(RW.RWOrdinarySingle)/(N.TimeOfConcept)/(V).*
 TimeOtherSOB->Other4 .*(RW.RWOrdinarySingle)/(N.TimeOfConcept).*
 TimeOtherSOB->Other5 .*(N.TimeOfConcept)/(V)/(RW.RWNumber).*
 TimeOtherSOB->Other6 .*(N.TimeOfConcept)/(V)/(RW.RWOrdinarySingle).*
+TimeOtherSOB->Other7 .*(P)/(RW.RWTime).*
+TimeOtherSOB->Other8 .*(V)/(RW.RWTime).*
+TimeOtherSOB->Other9 .*(RW.RWTime)/(P).*
+TimeOtherSOB->Other10 .*(RW.RWTime)/(V).*
 TimeSolarTermSOB->SolarTerm .*(RW.RWOrdinarySingle)/(N.TimeSolartermOfConcept).*
 
 ObjectSOB->Academic1 .*(RW.RWOrdinarySingle)/(N.ObjectAcademic).*
