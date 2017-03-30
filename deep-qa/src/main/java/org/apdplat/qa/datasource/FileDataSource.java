@@ -31,8 +31,10 @@ import java.util.List;
 import org.apdplat.qa.files.FilesConfig;
 import org.apdplat.qa.model.Evidence;
 import org.apdplat.qa.model.Question;
+import org.apdplat.qa.model.QuestionSimilarity;
 import org.apdplat.qa.system.CommonQuestionAnsweringSystem;
 import org.apdplat.qa.system.QuestionAnsweringSystem;
+import org.apdplat.qa.util.ChineseXsimilarityUtils;
 import org.apdplat.qa.util.MySQLUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,12 +65,22 @@ public class FileDataSource implements DataSource {
 
     @Override
     public Question getQuestion(String questionStr) {
+        LOG.info("==================================enter FileDataSource's getQuestion:");
+
         return getAndAnswerQuestion(questionStr, null);
     }
 
     @Override
     public Question getAndAnswerQuestion(String questionStr, QuestionAnsweringSystem questionAnsweringSystem) {
-        //1、先从本地缓存里面找
+
+        // Find the max similarity question.
+        QuestionSimilarity questionSimilarity =
+                ChineseXsimilarityUtils.getMaxSimilarity(MySQLUtils.getQuestionList(), questionStr);
+
+        questionStr = questionSimilarity.getQuestion();
+
+        LOG.info("==================================questionSimilarity:" + questionSimilarity);
+
         Question questionCache = MySQLUtils.getQuestionFromDatabase("baidu:", questionStr);
         if (questionCache != null) {
             //数据库中存在

@@ -71,7 +71,9 @@ public class AskServlet extends HttpServlet {
         }
         Question question = null;
         List<CandidateAnswer> candidateAnswers = null;
+        LOG.info("AAAAAAAAAAAAAAAAAAAAAAAAbbbbbbbbbbbbbbbbbbbbbbb");
         if (questionStr != null && questionStr.trim().length() > 3) {
+            LOG.info("AAAAAAAAAAAAAAAAAAAAAAAA");
             question = SharedQuestionAnsweringSystem.getInstance().answerQuestion(questionStr);
             if (question != null) {
                 candidateAnswers = question.getAllCandidateAnswer();

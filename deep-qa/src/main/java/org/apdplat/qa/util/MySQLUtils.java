@@ -18,22 +18,17 @@
 
 package org.apdplat.qa.util;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apdplat.qa.model.Evidence;
 import org.apdplat.qa.model.Question;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 /**
- *
  * @author 杨尚川
  */
 public class MySQLUtils {
@@ -47,12 +42,49 @@ public class MySQLUtils {
     private static final String USER = "root";
     private static final String PASSWORD = "root";
 
+    private static List<String> questionList = new CopyOnWriteArrayList<String>();
+
     static {
         try {
             Class.forName(DRIVER);
         } catch (ClassNotFoundException e) {
             LOG.error("MySQL驱动加载失败：", e);
         }
+        loadAllQuestion();
+    }
+
+    public static List<String> getQuestionList() {
+        return questionList;
+    }
+
+    private static void loadAllQuestion() {
+        String sql = "SELECT question FROM question";
+        Connection con = getConnection();
+        if (con == null) {
+            return;
+        }
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        try {
+            pst = con.prepareStatement(sql);
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                String question = rs.getString(1);
+                questionList.add(fetchQuestion(question, "baidu:"));
+            }
+        } catch (SQLException e) {
+            LOG.error("查询所有问题失败", e);
+        } finally {
+            close(con, pst, rs);
+        }
+    }
+
+    private static String fetchQuestion(String questionStrInDB, String pre) {
+        String[] questionArr = questionStrInDB.split(pre);
+        if (questionArr != null && questionArr.length == 2) {
+            return questionArr[1].trim();
+        }
+        return null;
     }
 
     private MySQLUtils() {
@@ -343,11 +375,19 @@ public class MySQLUtils {
     }
 
     public static void main(String[] args) throws Exception {
-        Question question = MySQLUtils.getQuestionFromDatabase("google:", "APDPlat的发起人是谁？");
-        if (question != null) {
-            System.out.println(question);
-        } else {
-            System.out.println("问题不在数据库中：APDPlat的发起人是谁？");
+//        Question question = MySQLUtils.getQuestionFromDatabase("google:", "APDPlat的发起人是谁？");
+//        if (question != null) {
+//            System.out.println(question);
+//        } else {
+//            System.out.println("问题不在数据库中：APDPlat的发起人是谁？");
+//        }
+        String questionStrInDB = "baidu:史晓峰是谁";
+        String question = fetchQuestion(questionStrInDB, "baidu:");
+        System.out.println(question);
+        System.out.println(questionList.size());
+        for (int i = 0; i < questionList.size(); i++) {
+            String a = questionList.get(i);
+            System.out.println(a);
         }
     }
 }

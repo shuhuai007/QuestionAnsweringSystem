@@ -156,6 +156,8 @@ public class QuestionAnsweringSystemImpl implements QuestionAnsweringSystem {
 
     @Override
     public Question answerQuestion(String questionStr) {
+        LOG.info("============enter QuestionAnsweringSystemImpl");
+        LOG.info("dataSource:" + dataSource);
         Question question = dataSource.getQuestion(questionStr);
         if (question != null) {
             return answerQuestion(question);
