@@ -76,11 +76,20 @@ public class AskServlet extends HttpServlet {
             throw new ServletException("The parameter n is illegal, please check!");
         }
 
-        int topN = -1;
-        if (n != null && StringUtils.isNumeric(n)) {
-            topN = Integer.parseInt(n);
-        }
+        int topN = retrieveTopN(n);
 
+        List<CandidateAnswer> candidateAnswers = getCandidateAnswers(questionStr);
+
+        LOG.info("问题：" + questionStr);
+
+        try (PrintWriter out = response.getWriter()) {
+            String json = JsonGenerator.generate(candidateAnswers, topN);
+            out.println(json);
+            LOG.info("答案：" + json);
+        }
+    }
+
+    private List<CandidateAnswer> getCandidateAnswers(String questionStr) {
         Question question = null;
         List<CandidateAnswer> candidateAnswers = null;
         if (checkQuestion(questionStr)) {
@@ -89,12 +98,15 @@ public class AskServlet extends HttpServlet {
                 candidateAnswers = question.getAllCandidateAnswer();
             }
         }
-        LOG.info("问题：" + questionStr);
-        try (PrintWriter out = response.getWriter()) {
-            String json = JsonGenerator.generate(candidateAnswers, topN);
-            out.println(json);
-            LOG.info("答案：" + json);
+        return candidateAnswers;
+    }
+
+    private int retrieveTopN(String n) {
+        int topN = -1;
+        if (n != null && StringUtils.isNumeric(n)) {
+            topN = Integer.parseInt(n);
         }
+        return topN;
     }
 
     private boolean checkQuestion(String questionStr) {
@@ -105,8 +117,6 @@ public class AskServlet extends HttpServlet {
     private boolean checkN(String n) {
         return org.apache.commons.lang.StringUtils.isNotBlank(n) && StringUtils.isNumeric(n);
     }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
 
     /**
      * Handles the HTTP <code>GET</code> method.
