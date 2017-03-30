@@ -60,10 +60,7 @@ public class PatternMatchStrategy {
     }
 
     public boolean enableQuestionPattern(QuestionPattern questionPattern) {
-        if (this.questionPatterns.contains(questionPattern)) {
-            return true;
-        }
-        return false;
+        return this.questionPatterns.contains(questionPattern);
     }
 
     public String getStrategyDes() {
