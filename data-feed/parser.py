@@ -78,7 +78,7 @@ def sendRequest(question):
     payload = {'n': '10', 'q': question}
     r = requests.post(url, data=payload)
     print "question is: {}".format(question)
-    print r.text
+    print r.text.endcode('utf-8')
 
 def readFile(filePath):
     print "filePath:{}".format(filePath)
@@ -106,5 +106,5 @@ if __name__ == '__main__':
     #    wm.add_job(sendRequest, q)
     #wm.wait_for_complete()
     map(sendRequest, questionList)
-    print questionList
+    #print questionList
 
