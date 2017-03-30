@@ -20,6 +20,7 @@ package org.apdplat.qa.api;
 
 import edu.stanford.nlp.util.StringUtils;
 import org.apdplat.qa.SharedQuestionAnsweringSystem;
+import org.apdplat.qa.constants.QuestionAnswerConstants;
 import org.apdplat.qa.model.CandidateAnswer;
 import org.apdplat.qa.model.Question;
 import org.apdplat.qa.util.ChineseCharUtils;
@@ -65,12 +66,12 @@ public class AskServlet extends HttpServlet {
 
         String n = request.getParameter("n");
 
-        if (org.apache.commons.lang.StringUtils.isBlank(questionStr)) {
+        if (!checkQuestion(questionStr)) {
             LOG.info("the input question is：" + questionStr);
             throw new ServletException("The question could not be blank");
         }
 
-        if (isIllegalTopN(n)) {
+        if (!checkN(n)) {
             LOG.info("the input n is：" + n);
             throw new ServletException("The parameter n is illegal, please check!");
         }
@@ -79,9 +80,10 @@ public class AskServlet extends HttpServlet {
         if (n != null && StringUtils.isNumeric(n)) {
             topN = Integer.parseInt(n);
         }
+
         Question question = null;
         List<CandidateAnswer> candidateAnswers = null;
-        if (questionStr != null && questionStr.trim().length() > 3) {
+        if (checkQuestion(questionStr)) {
             question = SharedQuestionAnsweringSystem.getInstance().answerQuestion(questionStr);
             if (question != null) {
                 candidateAnswers = question.getAllCandidateAnswer();
@@ -95,8 +97,13 @@ public class AskServlet extends HttpServlet {
         }
     }
 
-    private boolean isIllegalTopN(String n) {
-        return org.apache.commons.lang.StringUtils.isBlank(n) || !StringUtils.isNumeric(n);
+    private boolean checkQuestion(String questionStr) {
+        return questionStr != null
+                && questionStr.trim().length() >= QuestionAnswerConstants.QUESTION_MIN_LENGTH_THRESHOLD;
+    }
+
+    private boolean checkN(String n) {
+        return org.apache.commons.lang.StringUtils.isNotBlank(n) && StringUtils.isNumeric(n);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

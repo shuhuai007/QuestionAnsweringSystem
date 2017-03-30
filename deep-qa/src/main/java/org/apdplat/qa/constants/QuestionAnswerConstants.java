@@ -11,4 +11,9 @@ public class QuestionAnswerConstants {
      * max computation time threshold.
      */
     public static final long MAX_COMPUTATION_TIME_THRESHOLD = 10 * 1000;
+
+    /**
+     * min length threshold.
+     */
+    public static final int QUESTION_MIN_LENGTH_THRESHOLD = 4;
 }
