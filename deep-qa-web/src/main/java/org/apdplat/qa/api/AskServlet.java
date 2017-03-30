@@ -65,15 +65,17 @@ public class AskServlet extends HttpServlet {
         }
 
         String n = request.getParameter("n");
+        if (org.apache.commons.lang.StringUtils.isBlank(n)) {
+            LOG.info("the input question is：" + questionStr);
+            throw new ServletException("The question could not be blank");
+        }
         int topN = -1;
         if(n != null && StringUtils.isNumeric(n)){
             topN = Integer.parseInt(n);
         }
         Question question = null;
         List<CandidateAnswer> candidateAnswers = null;
-        LOG.info("AAAAAAAAAAAAAAAAAAAAAAAAbbbbbbbbbbbbbbbbbbbbbbb");
         if (questionStr != null && questionStr.trim().length() > 3) {
-            LOG.info("AAAAAAAAAAAAAAAAAAAAAAAA");
             question = SharedQuestionAnsweringSystem.getInstance().answerQuestion(questionStr);
             if (question != null) {
                 candidateAnswers = question.getAllCandidateAnswer();
