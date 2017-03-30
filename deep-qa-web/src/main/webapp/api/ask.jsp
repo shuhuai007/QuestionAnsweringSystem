@@ -1,9 +1,3 @@
-<%-- 
-    Document   : ask.jsp
-    Created on : 2014-8-2, 12:37:51
-    Author     : 杨尚川
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
