@@ -67,7 +67,8 @@ public class PatternBasedMultiLevelQuestionClassifier extends AbstractQuestionCl
     private static final MainPartExtracter mainPartExtracter = new MainPartExtracter();
     private final List<QuestionTypePatternFile> questionTypePatternFiles = new ArrayList<>();
 
-    public PatternBasedMultiLevelQuestionClassifier(final PatternMatchStrategy patternMatchStrategy, PatternMatchResultSelector patternMatchResultSelector) {
+    public PatternBasedMultiLevelQuestionClassifier(final PatternMatchStrategy patternMatchStrategy,
+                                                    PatternMatchResultSelector patternMatchResultSelector) {
         //设置模式匹配策略
         super.setPatternMatchStrategy(patternMatchStrategy);
         //设置模式匹配结果选择器
@@ -119,16 +120,20 @@ public class PatternBasedMultiLevelQuestionClassifier extends AbstractQuestionCl
     public Question classify(Question question) {
         String questionStr = question.getQuestion();
         LOG.info("使用【模式匹配】的方法判断问题类型： " + questionStr);
+
         PatternMatchStrategy patternMatchStrategy = getPatternMatchStrategy();
         if (!patternMatchStrategy.validate()) {
             LOG.error("没有指定模式匹配策略：" + questionStr);
             return question;
         }
+
         List<String> questionPatterns = extractQuestionPatternFromQuestion(questionStr, patternMatchStrategy);
+        LOG.info("===================questionPatterns:" + questionPatterns);
         if (questionPatterns.isEmpty()) {
             LOG.error("提取【问题模式】失败：" + questionStr);
             return question;
         }
+
         PatternMatchResult patternMatchResult = new PatternMatchResult();
         for (QuestionTypePatternFile qtpfile : questionTypePatternFiles) {
             String questionTypePatternFile = "/questionTypePatterns/" + qtpfile.getFile();
@@ -136,7 +141,8 @@ public class PatternBasedMultiLevelQuestionClassifier extends AbstractQuestionCl
             LOG.info("处理问题类型模式文件： " + questionTypePatternFile);
             QuestionTypePattern questionTypePattern = extractQuestionTypePattern(questionTypePatternFile);
             if (questionTypePattern != null) {
-                List<PatternMatchResultItem> patternMatchResultItems = getPatternMatchResultItems(questionPatterns, questionTypePattern);
+                List<PatternMatchResultItem> patternMatchResultItems
+                        = getPatternMatchResultItems(questionPatterns, questionTypePattern);
                 if (patternMatchResultItems.isEmpty()) {
                     LOG.info("在问题类型模式文件中[未找到]匹配项： " + questionTypePatternFile);
                 } else {
@@ -149,6 +155,7 @@ public class PatternBasedMultiLevelQuestionClassifier extends AbstractQuestionCl
         }
         List<PatternMatchResultItem> patternMatchResultItems = patternMatchResult.getAllPatternMatchResult();
         if (patternMatchResultItems.isEmpty()) {
+            LOG.info("BBBBBBBBBBBBBBBBBBBBB");
             LOG.info("问题【" + questionStr + "】没有匹配到任何模式：");
             return question;
         }
@@ -175,7 +182,8 @@ public class PatternBasedMultiLevelQuestionClassifier extends AbstractQuestionCl
         return getPatternMatchResultSelector().select(question, patternMatchResult);
     }
 
-    private List<PatternMatchResultItem> getPatternMatchResultItems(List<String> questionPatterns, QuestionTypePattern questionTypePattern) {
+    private List<PatternMatchResultItem> getPatternMatchResultItems(List<String> questionPatterns,
+                                                                    QuestionTypePattern questionTypePattern) {
         if (questionPatterns == null || questionPatterns.isEmpty()) {
             LOG.error("模式匹配之前至少指定一个【问题模式】");
             return null;
@@ -289,11 +297,14 @@ public class PatternBasedMultiLevelQuestionClassifier extends AbstractQuestionCl
         //去除问题中的前后空白字符
         question = question.trim();
         LOG.info("问题：" + question);
+
         if (patternMatchStrategy.enableQuestionPattern(QuestionPattern.Question)) {
             questionPatterns.add(question);
         }
+
         if (patternMatchStrategy.enableQuestionPattern(QuestionPattern.TermWithNatures)
                 || patternMatchStrategy.enableQuestionPattern(QuestionPattern.Natures)) {
+
             String termWithNature = questionPatternCache.get(question + "termWithNature");
             String nature = questionPatternCache.get(question + "nature");
 
@@ -304,7 +315,7 @@ public class PatternBasedMultiLevelQuestionClassifier extends AbstractQuestionCl
                 //apdplat/en 的/uj 发起人/n 是/v 谁/RW.RWPersonSingle ？/w 
                 StringBuilder termWithNatureStrs = new StringBuilder();
                 //APDPlat的发起人是谁？
-                //en/uj/n/v/RW.RWPersonSingle/w		
+                //en/uj/n/v/RW.RWPersonSingle/w
                 StringBuilder natureStrs = new StringBuilder();
                 int i = 0;
                 for (Word word : words) {
@@ -322,11 +333,11 @@ public class PatternBasedMultiLevelQuestionClassifier extends AbstractQuestionCl
 
             if (patternMatchStrategy.enableQuestionPattern(QuestionPattern.TermWithNatures)) {
                 questionPatterns.add(termWithNature);
-                LOG.info("词和词性序列：" + termWithNature);
+                LOG.info("termWithNature 词和词性序列：" + termWithNature);
             }
             if (patternMatchStrategy.enableQuestionPattern(QuestionPattern.Natures)) {
                 questionPatterns.add(nature);
-                LOG.info("词性序列：" + nature);
+                LOG.info("nature 词性序列：" + nature);
             }
         }
         if (patternMatchStrategy.enableQuestionPattern(QuestionPattern.MainPartPattern)
@@ -413,12 +424,14 @@ public class PatternBasedMultiLevelQuestionClassifier extends AbstractQuestionCl
 
         PatternMatchResultSelector patternMatchResultSelector = new DefaultPatternMatchResultSelector();
 
-        QuestionClassifier questionClassifier = new PatternBasedMultiLevelQuestionClassifier(patternMatchStrategy, patternMatchResultSelector);
+        QuestionClassifier questionClassifier = new PatternBasedMultiLevelQuestionClassifier(patternMatchStrategy,
+                patternMatchResultSelector);
 
-        Question question = questionClassifier.classify("Who is the author of apdplat?");
+        Question question = questionClassifier.classify("发现大庆油田在什么时候");
 
         if (question != null) {
-            LOG.info("问题【" + question.getQuestion() + "】的类型为：" + question.getQuestionType() + " 候选类型为：" + question.getCandidateQuestionTypes());
+            LOG.info("问题【" + question.getQuestion() + "】的类型为：" + question.getQuestionType()
+                    + " 候选类型为：" + question.getCandidateQuestionTypes());
         }
     }
 }
