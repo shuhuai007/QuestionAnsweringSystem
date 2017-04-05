@@ -1,21 +1,3 @@
-/**
- * APDPlat - Application Product Development Platform
- * Copyright (c) 2013, 杨尚川, yang-shangchuan@qq.com
- * <p>
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package org.apdplat.qa.model;
 
 /**
@@ -25,7 +7,7 @@ package org.apdplat.qa.model;
 public enum QuestionType {
 
     NULL("未知"),
-    PERSON_NAME("人名 "),
+    PERSON_NAME("人名"),
     LOCATION_NAME("地名"),
     ORGANIZATION_NAME("团体机构名"),
     NUMBER("数字"),
