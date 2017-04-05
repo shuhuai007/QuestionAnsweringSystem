@@ -1,7 +1,7 @@
 package org.apdplat.qa.constants;
 
 /**
- * Created by jiezhou on 30/03/2017.
+ * Constants class.
  */
 public class QuestionAnswerConstants {
 
