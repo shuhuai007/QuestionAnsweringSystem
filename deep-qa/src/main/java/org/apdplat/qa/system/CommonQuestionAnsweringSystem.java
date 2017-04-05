@@ -1,23 +1,3 @@
-/**
- * 
- * APDPlat - Application Product Development Platform
- * Copyright (c) 2013, 杨尚川, yang-shangchuan@qq.com
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
- */
-
 package org.apdplat.qa.system;
 
 import java.util.ArrayList;
@@ -26,6 +6,9 @@ import java.util.List;
 import org.apdplat.qa.datasource.DataSource;
 import org.apdplat.qa.datasource.FileDataSource;
 import org.apdplat.qa.files.FilesConfig;
+import org.apdplat.qa.questiontypeanalysis.CombinationQuestionClassifier;
+import org.apdplat.qa.questiontypeanalysis.bayes.NaiveBayesClassifierPool;
+import org.apdplat.qa.questiontypeanalysis.bayes.NaiveBayesQuestionClassifier;
 import org.apdplat.qa.questiontypeanalysis.patternbased.DefaultPatternMatchResultSelector;
 import org.apdplat.qa.questiontypeanalysis.patternbased.PatternBasedMultiLevelQuestionClassifier;
 import org.apdplat.qa.questiontypeanalysis.patternbased.PatternMatchResultSelector;
@@ -50,6 +33,7 @@ import org.apdplat.qa.select.CandidateAnswerSelect;
 import org.apdplat.qa.select.CommonCandidateAnswerSelect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  * 通用问答系统实现
@@ -135,6 +119,27 @@ public class CommonQuestionAnsweringSystem extends QuestionAnsweringSystemImpl {
         super.setCandidateAnswerScore(combinationCandidateAnswerScore);
 
         //6、问题分类器
+        QuestionClassifier patternMatchQuestionClassifier = getPatternMatchQuestionClassifier();
+
+        // Load naive bayes classifier.
+        QuestionClassifier naiveBayesClassifier = getNaiveBayesClassifier();
+
+        CombinationQuestionClassifier combinationQuestionClassifier = new CombinationQuestionClassifier();
+        combinationQuestionClassifier.addClassifier(patternMatchQuestionClassifier);
+        combinationQuestionClassifier.addClassifier(naiveBayesClassifier);
+        super.setQuestionClassifier(combinationQuestionClassifier);
+
+
+        LOG.info("问答系统构造完成");
+    }
+
+    private QuestionClassifier getNaiveBayesClassifier() {
+        QuestionClassifier questionClassifier = new NaiveBayesQuestionClassifier();
+        return questionClassifier;
+
+    }
+
+    private QuestionClassifier getPatternMatchQuestionClassifier() {
         PatternMatchStrategy patternMatchStrategy = new PatternMatchStrategy();
         patternMatchStrategy.addQuestionPattern(QuestionPattern.Question);
         patternMatchStrategy.addQuestionPattern(QuestionPattern.TermWithNatures);
@@ -145,11 +150,8 @@ public class CommonQuestionAnsweringSystem extends QuestionAnsweringSystemImpl {
         patternMatchStrategy.addQuestionTypePatternFile("QuestionTypePatternsLevel2_true.txt");
         patternMatchStrategy.addQuestionTypePatternFile("QuestionTypePatternsLevel3_true.txt");
         PatternMatchResultSelector patternMatchResultSelector = new DefaultPatternMatchResultSelector();
-        QuestionClassifier questionClassifier = new PatternBasedMultiLevelQuestionClassifier(patternMatchStrategy,
+        return new PatternBasedMultiLevelQuestionClassifier(patternMatchStrategy,
                 patternMatchResultSelector);
-        super.setQuestionClassifier(questionClassifier);
-
-        LOG.info("问答系统构造完成");
     }
 
     /**

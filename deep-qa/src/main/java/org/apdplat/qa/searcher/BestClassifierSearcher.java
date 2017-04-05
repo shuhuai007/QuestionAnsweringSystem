@@ -1,21 +1,19 @@
 /**
- * 
  * APDPlat - Application Product Development Platform
  * Copyright (c) 2013, 杨尚川, yang-shangchuan@qq.com
- * 
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
  */
 
 package org.apdplat.qa.searcher;
@@ -126,7 +124,7 @@ public class BestClassifierSearcher {
     private static void classify(PatternMatchStrategy patternMatchStrategy) {
         PatternMatchResultSelector patternMatchResultSelector = new DefaultPatternMatchResultSelector();
         QuestionClassifier questionClassifier = new PatternBasedMultiLevelQuestionClassifier(patternMatchStrategy, patternMatchResultSelector);
-        String file = "/org/apdplat.qa/questiontypeanalysis/AllTestQuestions.txt";
+        String file = "/org/apdplat/qa/questiontypeanalysis/AllTestQuestions.txt";
         Set<String> questions = Tools.getQuestions(file);
         LOG.info("从文件中加载" + questions.size() + "个问题：" + file);
         List<String> no = new ArrayList<String>();
@@ -163,7 +161,7 @@ public class BestClassifierSearcher {
                     yes.add("问题" + (i++) + "【" + q + "】的类型为：" + questionType.name());
                 }
             } else {
-				//不能识别分类
+                //不能识别分类
                 //原因有两种：一是确实不能识别，而是识别了但是无法从候选类别中选择主类别
                 if (question != null && question.getCandidateQuestionTypes() != null && question.getCandidateQuestionTypes().size() > 0) {
                     canNotSelect.add("问题" + (i++) + "【" + q + "】的类型为：NULL" + " 应该为：" + type + "，候选类型为：" + question.getCandidateQuestionTypes());

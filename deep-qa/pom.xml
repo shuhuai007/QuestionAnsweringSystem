@@ -219,6 +219,13 @@
             <systemPath>${project.basedir}/../lib/xsimilarity-0.1.jar</systemPath>
         </dependency>
         <dependency>
+            <groupId>com.thoughtworks</groupId>
+            <artifactId>java-naive-bayes-classifier</artifactId>
+            <version>1.0.5</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/../lib/java-naive-bayes-classifier-1.0.5.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>18.0</version>

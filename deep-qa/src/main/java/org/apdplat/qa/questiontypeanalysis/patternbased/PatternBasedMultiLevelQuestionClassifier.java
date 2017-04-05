@@ -37,6 +37,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apdplat.qa.model.Question;
+import org.apdplat.qa.model.QuestionType;
 import org.apdplat.qa.parser.WordParser;
 import org.apdplat.qa.questiontypeanalysis.AbstractQuestionClassifier;
 import org.apdplat.qa.questiontypeanalysis.QuestionClassifier;
@@ -124,6 +125,7 @@ public class PatternBasedMultiLevelQuestionClassifier extends AbstractQuestionCl
         PatternMatchStrategy patternMatchStrategy = getPatternMatchStrategy();
         if (!patternMatchStrategy.validate()) {
             LOG.error("没有指定模式匹配策略：" + questionStr);
+            question.setQuestionType(QuestionType.NULL);
             return question;
         }
 
@@ -131,6 +133,7 @@ public class PatternBasedMultiLevelQuestionClassifier extends AbstractQuestionCl
         LOG.info("===================questionPatterns:" + questionPatterns);
         if (questionPatterns.isEmpty()) {
             LOG.error("提取【问题模式】失败：" + questionStr);
+            question.setQuestionType(QuestionType.NULL);
             return question;
         }
 
@@ -157,6 +160,7 @@ public class PatternBasedMultiLevelQuestionClassifier extends AbstractQuestionCl
         if (patternMatchResultItems.isEmpty()) {
             LOG.info("BBBBBBBBBBBBBBBBBBBBB");
             LOG.info("问题【" + questionStr + "】没有匹配到任何模式：");
+            question.setQuestionType(QuestionType.NULL);
             return question;
         }
         if (patternMatchResultItems.size() > 1) {

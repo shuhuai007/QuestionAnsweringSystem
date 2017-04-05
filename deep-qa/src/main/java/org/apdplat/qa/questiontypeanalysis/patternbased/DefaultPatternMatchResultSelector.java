@@ -46,6 +46,7 @@ public class DefaultPatternMatchResultSelector implements PatternMatchResultSele
         List<PatternMatchResultItem> allPatternMatchResultItems = patternMatchResult.getAllPatternMatchResult();
         if (allPatternMatchResultItems == null || allPatternMatchResultItems.isEmpty()) {
             LOG.info("所有问题类型模式匹配结果为空");
+            question.setQuestionType(QuestionType.NULL);
             return null;
         }
         for (QuestionTypePatternFile file : patternMatchResult.getQuestionTypePatternFilesFromCompactToLoose()) {
@@ -106,8 +107,8 @@ public class DefaultPatternMatchResultSelector implements PatternMatchResultSele
                 return question;
             }
         }
-        LOG.info("匹配未成功，不能识别问题类型，不能识别的问题类型统一指定为：" + QuestionType.PERSON_NAME);
-        question.setQuestionType(QuestionType.PERSON_NAME);
+        LOG.info("匹配未成功，不能识别问题类型，不能识别的问题类型统一指定为：" + QuestionType.NULL);
+        question.setQuestionType(QuestionType.NULL);
         return question;
     }
 

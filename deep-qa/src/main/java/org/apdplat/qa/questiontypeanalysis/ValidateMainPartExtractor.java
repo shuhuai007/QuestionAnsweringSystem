@@ -36,9 +36,9 @@ import org.slf4j.LoggerFactory;
  *
  * @author 杨尚川
  */
-public class ValidateMainPartExtracter {
+public class ValidateMainPartExtractor {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ValidateMainPartExtracter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ValidateMainPartExtractor.class);
 
     public static List<QuestionStructure> parseQuestions(Set<String> questions) {
         LOG.info("解析预先标注的语料的主谓宾");
@@ -81,12 +81,15 @@ public class ValidateMainPartExtracter {
 
     public static void validate() {
         MainPartExtracter mainPartExtracter = new MainPartExtracter();
-        String file = "/org/apdplat.qa/questiontypeanalysis/AllTestQuestionsWithMainPart.txt";
+        String file = "/org/apdplat/qa/questiontypeanalysis/AllTestQuestionsWithMainPart.txt";
         Set<String> questionStr = Tools.getQuestions(file);
         LOG.info("从文件中加载" + questionStr.size() + "个问题：" + file);
         List<QuestionStructure> questions = parseQuestions(questionStr);
         LOG.info("从标注的问句语料库中加载" + questionStr.size() + "条记录");
         LOG.info("成功解析" + questions.size() + "个问句");
+        if (true) {
+            return;
+        }
 
         //不能提取
         List<QuestionStructure> no = new ArrayList<>();
