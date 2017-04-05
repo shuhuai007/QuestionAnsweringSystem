@@ -145,7 +145,8 @@ public class CommonQuestionAnsweringSystem extends QuestionAnsweringSystemImpl {
         patternMatchStrategy.addQuestionTypePatternFile("QuestionTypePatternsLevel2_true.txt");
         patternMatchStrategy.addQuestionTypePatternFile("QuestionTypePatternsLevel3_true.txt");
         PatternMatchResultSelector patternMatchResultSelector = new DefaultPatternMatchResultSelector();
-        QuestionClassifier questionClassifier = new PatternBasedMultiLevelQuestionClassifier(patternMatchStrategy, patternMatchResultSelector);
+        QuestionClassifier questionClassifier = new PatternBasedMultiLevelQuestionClassifier(patternMatchStrategy,
+                patternMatchResultSelector);
         super.setQuestionClassifier(questionClassifier);
 
         LOG.info("问答系统构造完成");
