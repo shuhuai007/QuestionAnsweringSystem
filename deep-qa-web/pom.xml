@@ -3,8 +3,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.apdplat</groupId>
-    <artifactId>deep-qa-web</artifactId>
-    <version>1.2</version>
+    <artifactId>thougtworks-cieg</artifactId>
+    <version>0.1</version>
     <packaging>war</packaging>
 
     <name>deep-qa-web</name>
